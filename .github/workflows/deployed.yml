@@ -52,6 +52,15 @@ jobs:
   
       - name: Deploy to container
         run: docker run -d --name game -p 3000:3000 amuldark/tic-tac-toe:latest
+      - name: Send a Slack Notification
+        if: always()
+        uses: act10ns/slack@v1
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: '#git'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 
   
